@@ -1,0 +1,61 @@
+USE QUIZP3
+
+
+CREATE TABLE VIAJEROS (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(50) NOT NULL,
+    Segundo NVARCHAR(50),
+    Apellido1 NVARCHAR(50) NOT NULL,
+    Apellido2 NVARCHAR(50),
+    FechaNacimiento DATE NOT NULL,
+    Nacionalidad NVARCHAR(50) NOT NULL,
+    CorreoElectronico NVARCHAR(100),
+    Genero NVARCHAR(20) NOT NULL,
+    Telefono NVARCHAR(20));
+
+
+-- Create table estados
+CREATE TABLE ESTADOS (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Descripcion NVARCHAR(100) NOT NULL
+);
+GO
+
+-- Create table documento
+CREATE TABLE DOCUMENTO (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    TipoDocumento NVARCHAR(50) NOT NULL,
+    NumeroDocumento NVARCHAR(50) NOT NULL UNIQUE,
+    FechaExpiracion DATETIME NOT NULL,
+    EstadoID INT NOT NULL,
+    IdViajero INT NOT NULL,
+    CONSTRAINT FK_ESTADOID FOREIGN KEY (EstadoID) REFERENCES ESTADOS(ID),
+    CONSTRAINT FK_VIAJERO FOREIGN KEY (IdViajero) REFERENCES VIAJEROS(ID)
+);
+GO
+
+-- Create table usuarios
+CREATE TABLE USUARIOS (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    Nombre NVARCHAR(50) NOT NULL,
+    Apellido1 NVARCHAR(50) NOT NULL,
+    Apellido2 NVARCHAR(50),
+    Clave NVARCHAR(255) NOT NULL, -- Consider storing hashed passwords
+    Email NVARCHAR(100) NOT NULL UNIQUE,
+    Rol NVARCHAR(50) NOT NULL
+);
+GO
+
+-- Create table movimientos
+CREATE TABLE MOVIMIENTOS (
+    ID INT PRIMARY KEY IDENTITY(1,1),
+    IdViajero INT NOT NULL,
+    Fecha DATETIME NOT NULL,
+    Destino NVARCHAR(100) NOT NULL,
+    Origen NVARCHAR(100) NOT NULL,
+    TipoSolicitud NVARCHAR(50),
+    IdUsuario INT NOT NULL,
+    constraint fk_IDVIAJERO FOREIGN KEY (IdViajero) REFERENCES VIAJEROS(ID),
+    constraint fk_IDUsuario FOREIGN KEY (IdUsuario) REFERENCES USUARIOS(ID)
+);
+GO

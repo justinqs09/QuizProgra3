@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QUIZP3Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="DOCUMENTO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TipoDocumento" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="NumeroDocumento" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="FechaExpiracion" Type="datetime" Nullable="false" />
+    <Property Name="EstadoID" Type="int" Nullable="false" />
+    <Property Name="IdViajero" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ESTADOS">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Descripcion" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MOVIMIENTOS">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IdViajero" Type="int" Nullable="false" />
+    <Property Name="Fecha" Type="datetime" Nullable="false" />
+    <Property Name="Destino" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Origen" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="TipoSolicitud" Type="nvarchar" MaxLength="50" />
+    <Property Name="IdUsuario" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="USUARIOS">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Apellido1" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Apellido2" Type="nvarchar" MaxLength="50" />
+    <Property Name="Clave" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Rol" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VIAJEROS">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Segundo" Type="nvarchar" MaxLength="50" />
+    <Property Name="Apellido1" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Apellido2" Type="nvarchar" MaxLength="50" />
+    <Property Name="FechaNacimiento" Type="date" Nullable="false" />
+    <Property Name="Nacionalidad" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CorreoElectronico" Type="nvarchar" MaxLength="100" />
+    <Property Name="Genero" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Telefono" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <Association Name="FK_ESTADOID">
+    <End Role="ESTADOS" Type="Self.ESTADOS" Multiplicity="1" />
+    <End Role="DOCUMENTO" Type="Self.DOCUMENTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ESTADOS">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DOCUMENTO">
+        <PropertyRef Name="EstadoID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_IDUsuario">
+    <End Role="USUARIOS" Type="Self.USUARIOS" Multiplicity="1" />
+    <End Role="MOVIMIENTOS" Type="Self.MOVIMIENTOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="USUARIOS">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MOVIMIENTOS">
+        <PropertyRef Name="IdUsuario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_IDVIAJERO">
+    <End Role="VIAJEROS" Type="Self.VIAJEROS" Multiplicity="1" />
+    <End Role="MOVIMIENTOS" Type="Self.MOVIMIENTOS" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VIAJEROS">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MOVIMIENTOS">
+        <PropertyRef Name="IdViajero" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VIAJERO">
+    <End Role="VIAJEROS" Type="Self.VIAJEROS" Multiplicity="1" />
+    <End Role="DOCUMENTO" Type="Self.DOCUMENTO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="VIAJEROS">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="DOCUMENTO">
+        <PropertyRef Name="IdViajero" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="QUIZP3ModelStoreContainer">
+    <EntitySet Name="DOCUMENTO" EntityType="Self.DOCUMENTO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ESTADOS" EntityType="Self.ESTADOS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MOVIMIENTOS" EntityType="Self.MOVIMIENTOS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VIAJEROS" EntityType="Self.VIAJEROS" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_ESTADOID" Association="Self.FK_ESTADOID">
+      <End Role="ESTADOS" EntitySet="ESTADOS" />
+      <End Role="DOCUMENTO" EntitySet="DOCUMENTO" />
+    </AssociationSet>
+    <AssociationSet Name="fk_IDUsuario" Association="Self.fk_IDUsuario">
+      <End Role="USUARIOS" EntitySet="USUARIOS" />
+      <End Role="MOVIMIENTOS" EntitySet="MOVIMIENTOS" />
+    </AssociationSet>
+    <AssociationSet Name="fk_IDVIAJERO" Association="Self.fk_IDVIAJERO">
+      <End Role="VIAJEROS" EntitySet="VIAJEROS" />
+      <End Role="MOVIMIENTOS" EntitySet="MOVIMIENTOS" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VIAJERO" Association="Self.FK_VIAJERO">
+      <End Role="VIAJEROS" EntitySet="VIAJEROS" />
+      <End Role="DOCUMENTO" EntitySet="DOCUMENTO" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
